@@ -11,13 +11,16 @@
   "author": "Ananthan",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.7.7",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-async-handler": "^1.2.0",
     "mongoose": "^8.6.1"
   },
   "devDependencies": {
+    "@types/axios": "^0.14.0",
     "@types/express": "^4.17.21",
+    "@types/mongoose": "^5.11.97",
     "@types/node": "^22.5.4",
     "nodemon": "^3.1.4",
     "ts-node": "^10.9.2",
