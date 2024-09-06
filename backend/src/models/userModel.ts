@@ -4,6 +4,7 @@ import { IUser } from "../types/modalTypes";
 const UserSchema: Schema = new Schema<IUser>({
   username: { type: String, required: true, unique: true },
   location: { type: String },
+  avatar:{type:String},
   bio: { type: String },
   blog: { type: String },
   public_repos: { type: Number, default: 0 },
@@ -15,7 +16,7 @@ const UserSchema: Schema = new Schema<IUser>({
     followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "Follow" }],
     following: [{ type: mongoose.Schema.Types.ObjectId, ref: "Follow" }],
   },
-  friends: [{ name: { type: String } }],
+  friends: [{ name: { type: String },avatar:{type:String} }],
   repos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Repo" }],
   isDeleted: { type: Boolean, default: false },
 });

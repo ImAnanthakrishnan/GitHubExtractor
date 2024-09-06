@@ -2,10 +2,7 @@ import mongoose, { Mongoose } from "mongoose";
 import { IRepo } from "../types/modalTypes";
 
 const ReposModel = new mongoose.Schema<IRepo>({
-    username:{
-        type:String,
-        required:true
-    },
+    userId: { type: mongoose.Types.ObjectId, ref: 'User', required: true },
     repoName:{
         type:String,
         required:true

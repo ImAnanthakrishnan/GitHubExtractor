@@ -3,6 +3,7 @@ import { Document,ObjectId } from 'mongoose';
 export interface IUser extends Document {
   username: string;
   location?: string;
+  avatar:string;
   bio?: string;
   blog?: string;
   public_repos: number;
@@ -16,6 +17,7 @@ export interface IUser extends Document {
   };
   friends: {
     name: string;
+    avatar:string;
   }[];
   repos: ObjectId[];  
   isDeleted: boolean;
@@ -23,16 +25,18 @@ export interface IUser extends Document {
 //////////////////////////////////////////////////////
 interface IFollower {
   name: string;
+  avatar:string
 }
 
 export interface IFollow extends Document {
+  userId:ObjectId;
   followers: IFollower[];
   following: IFollower[];
 }
 ////////////////////////////////////////////////////////////
 
 export interface IRepo {
-  username:string;
+  userId:ObjectId;
   repoName: string;
   description: string;
   topics?: string[]; 
