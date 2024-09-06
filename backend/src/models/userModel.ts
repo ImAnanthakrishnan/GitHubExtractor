@@ -13,8 +13,8 @@ const UserSchema: Schema = new Schema<IUser>({
   following: { type: Number, default: 0 },
   created_at: { type: Date, default: Date.now },
   follow_details: {
-    followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "Follow" }],
-    following: [{ type: mongoose.Schema.Types.ObjectId, ref: "Follow" }],
+    followers: [{ type: Number }],
+    following: [{ type: Number}],
   },
   friends: [{ name: { type: String }, avatar: { type: String } }],
   repos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Repo" }],

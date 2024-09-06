@@ -12,8 +12,8 @@ export interface IUser extends Document {
   following: number;
   created_at: Date;
   follow_details: {
-    followers: ObjectId[];
-    following: ObjectId[];
+    followers: number[];
+    following: number[];
   };
   friends: {
     name: string;
@@ -25,7 +25,8 @@ export interface IUser extends Document {
 //////////////////////////////////////////////////////
 interface IFollower {
   name: string;
-  avatar:string
+  avatar:string;
+  id:ObjectId;
 }
 
 export interface IFollow extends Document {

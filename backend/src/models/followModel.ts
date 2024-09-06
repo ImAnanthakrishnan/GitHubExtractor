@@ -13,6 +13,10 @@ const FollowSchema = new Schema<IFollow>({
       avatar:{
         type:String,
         required:true
+      },
+      id:{
+        type:Number,
+        required:true
       }
     },
   ],
@@ -25,6 +29,10 @@ const FollowSchema = new Schema<IFollow>({
       },
       avatar:{
         type:String,
+        required:true
+      },
+      id:{
+        type:Number,
         required:true
       }
     },
