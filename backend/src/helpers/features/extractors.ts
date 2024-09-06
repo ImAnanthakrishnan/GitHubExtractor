@@ -1,13 +1,17 @@
 import axios from "axios";
-import User from "../../models/userModel.js";
-import Repos from "../../models/reposModel.js";
+import User from "../../models/userModel";
+import Repos from "../../models/reposModel";
 import mongoose,{ObjectId} from "mongoose";
-import Follow from "../../models/followModel.js";
+import Follow from "../../models/followModel";
 
 export const saveUserData = async (username: string) => {
   try {
     let user;
-    const { data } = await axios.get(`${process.env.GIT_API}/${username}`);
+    const { data } = await axios.get(`${process.env.GIT_API}/${username}`,{
+      headers: {
+        'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`, 
+      },
+    });
 
     user = new User({
       username: data.login,
@@ -27,7 +31,7 @@ export const saveUserData = async (username: string) => {
       username,
       user._id
     ); //saving repo's
-
+     
     const {followerIds,followingIds,friends} = await saveFollowDetails(username,user._id); //saved and extracted id
 
     //all id's updated;
@@ -50,15 +54,14 @@ const saveRepos = async (username: string, userId: unknown) => {
     const { data } = await axios.get(
       `${process.env.GIT_API}/${username}/repos`
     );
-
     const repoIds: ObjectId[] = await Promise.all(
       data.map(async (repoData: any) => {
-        let repo = await Repos.findOne({ repoName: repoData, userId }); //checking for duplicate repo in same username
+        let repo = await Repos.findOne({ repoName: repoData.name, userId }); //checking for duplicate repo in same username
         if (!repo) {
           repo = new Repos({
             userId,
             repoName: repoData.name,
-            description: repoData.description || "",
+            description: repoData.description || "No description",
             topics: repoData.topics || [],
           });
           await repo.save();
@@ -77,10 +80,18 @@ const saveRepos = async (username: string, userId: unknown) => {
 const saveFollowDetails = async (username: string, userId: unknown) => {
   try {
     const [followers, following] = await Promise.all([
-      axios.get(`${process.env.GIT_API}/${username}/followers`),
-      axios.get(`${process.env.GIT_API}/${username}/following`),
+      axios.get(`${process.env.GIT_API}/${username}/followers`,{
+        headers: {
+          'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`, 
+        },
+      }),
+      axios.get(`${process.env.GIT_API}/${username}/following`,{
+        headers: {
+          'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`, 
+        },
+      }),
     ]);
-
+  
     let followDocument = await Follow.findOne({ userId });
 
     if (!followDocument) {
@@ -93,37 +104,35 @@ const saveFollowDetails = async (username: string, userId: unknown) => {
     }
 
     //follower data save and extract id;
-    const followerIds: ObjectId[] = await Promise.all(
+    const followerIds: number[] = await Promise.all(
       followers.data.map(async (followerData: any) => {
         const existingFollower = followDocument.followers.find(
           (f) => f.name === followerData.login
         );
 
         if (!existingFollower) {
-          followDocument.followers.push({ name: followerData.login,avatar:followerData.avatar_url });
+          followDocument.followers.push({ name: followerData.login,avatar:followerData.avatar_url,id:followerData.id});
         }
 
-        return followerData._id;
+        return followerData.id;
       })
     );
 
     //follower data save and extract id;
-    const followingIds: ObjectId[] = await Promise.all(
+    const followingIds: number[] = await Promise.all(
       following.data.map(async (followingData: any) => {
         const existingFollowing = followDocument.following.find(
           (f) => f.name === followingData.login
         );
 
         if (!existingFollowing) {
-          followDocument.followers.push({ name: followingData.login,avatar:followingData.avatar_url });
+          followDocument.following.push({ name: followingData.login,avatar:followingData.avatar_url,id:followingData.id });
         }
 
-        return followingData._id;
+        return followingData.id;
       })
     );
-
     await followDocument.save(); //saved all data;
-
     //find friends-------
     const friends = await findFriends(followers.data,following.data);
 
@@ -134,14 +143,14 @@ const saveFollowDetails = async (username: string, userId: unknown) => {
   }
 };
 
-const findFriends = async(followers:{name:string,avatar:string}[],followings:{name:string,avatar:string}[]) => {
+const findFriends = async(followers:{login:string,avatar_url:string}[],followings:{login:string,avatar_url:string}[]) => {
   //lookup for following 
-  const followingSet = new Set(followings.map(user => user.name));
-
+  const followingSet = new Set(followings.map(user => user.login));
   // Filter followers to find mutual
+
   const mutualFriends = followers
-    .filter(follower => followingSet.has(follower.name))
-    .map(f => ({ name: f.name, avatar: f.avatar }));
+    .filter(follower => followingSet.has(follower.login))
+    .map(f => ({ name: f.login, avatar: f.avatar_url }));
 
   return mutualFriends;
 }

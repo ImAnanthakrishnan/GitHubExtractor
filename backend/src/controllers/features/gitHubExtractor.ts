@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
-import User from "../../models/userModel.js";
-import { saveUserData } from "../../helpers/features/extractors.js";
-import { getAllUserGitDetails } from "../../helpers/features/detailsGetter.js";
+import User from "../../models/userModel";
+import { saveUserData } from "../../helpers/features/extractors";
+import { getAllUserGitDetails } from "../../helpers/features/detailsGetter";
 
 export const extractGitUserDetails = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
-    const { username } = req.body; //fetch data using username
+    const { username } = req.params; //fetch data using username
 
     if (!username) {
       res.status(400).json({
