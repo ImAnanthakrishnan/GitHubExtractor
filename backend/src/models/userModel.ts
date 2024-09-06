@@ -1,5 +1,5 @@
-import mongoose, { Schema } from 'mongoose';
-import { IUser } from '../types/modalTypes';
+import mongoose, { Schema } from "mongoose";
+import { IUser } from "../types/modalTypes";
 
 const UserSchema: Schema = new Schema<IUser>({
   username: { type: String, required: true, unique: true },
@@ -11,12 +11,15 @@ const UserSchema: Schema = new Schema<IUser>({
   followers: { type: Number, default: 0 },
   following: { type: Number, default: 0 },
   created_at: { type: Date, default: Date.now },
-  follow_details: [{ type: mongoose.Schema.Types.ObjectId, ref:'Follow' }],
-  friends: [{ type: String }],
-  repos:[{type: mongoose.Schema.Types.ObjectId, ref:'Repo'}],
-  isDeleted: { type: Boolean, default: false }
+  follow_details: {
+    followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "Follow" }],
+    following: [{ type: mongoose.Schema.Types.ObjectId, ref: "Follow" }],
+  },
+  friends: [{ name: { type: String } }],
+  repos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Repo" }],
+  isDeleted: { type: Boolean, default: false },
 });
 
-const User = mongoose.model<IUser>('User', UserSchema);
+const User = mongoose.model<IUser>("User", UserSchema);
 
 export default User;

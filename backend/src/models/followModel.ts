@@ -9,14 +9,6 @@ const FollowSchema = new Schema<IFollow>({
         unique: true,
         required: true,
       },
-      avatar_url: {
-        type: String,
-        requried: true,
-      },
-      repos: {
-        type: String,
-        required:true,
-      },
     },
   ],
   following: [
@@ -25,14 +17,6 @@ const FollowSchema = new Schema<IFollow>({
         type: String,
         unique: true,
         required: true,
-      },
-      avatar_url: {
-        type: String,
-        requried: true,
-      },
-      repos: {
-        type: String,
-        required:true,
       },
     },
   ],

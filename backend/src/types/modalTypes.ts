@@ -10,16 +10,19 @@ export interface IUser extends Document {
   followers: number;
   following: number;
   created_at: Date;
-  follow_details: ObjectId[]; 
-  friends:string[]
+  follow_details: {
+    followers: ObjectId[];
+    following: ObjectId[];
+  };
+  friends: {
+    name: string;
+  }[];
   repos: ObjectId[];  
   isDeleted: boolean;
 }
 //////////////////////////////////////////////////////
 interface IFollower {
   name: string;
-  avatar_url: string;
-  repos: string;
 }
 
 export interface IFollow extends Document {
@@ -29,6 +32,7 @@ export interface IFollow extends Document {
 ////////////////////////////////////////////////////////////
 
 export interface IRepo {
+  username:string;
   repoName: string;
   description: string;
   topics?: string[]; 

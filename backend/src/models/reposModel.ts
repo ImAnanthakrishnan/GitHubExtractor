@@ -2,6 +2,10 @@ import mongoose, { Mongoose } from "mongoose";
 import { IRepo } from "../types/modalTypes";
 
 const ReposModel = new mongoose.Schema<IRepo>({
+    username:{
+        type:String,
+        required:true
+    },
     repoName:{
         type:String,
         required:true
