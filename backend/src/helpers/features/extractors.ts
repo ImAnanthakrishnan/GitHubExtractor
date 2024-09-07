@@ -1,22 +1,22 @@
 import axios from "axios";
 import User from "../../models/userModel";
 import Repos from "../../models/reposModel";
-import mongoose,{ObjectId} from "mongoose";
+import mongoose, { ObjectId } from "mongoose";
 import Follow from "../../models/followModel";
 
 export const saveUserData = async (username: string) => {
   try {
     let user;
-    const { data } = await axios.get(`${process.env.GIT_API}/${username}`,{
+    const { data } = await axios.get(`${process.env.GIT_API}/${username}`, {
       headers: {
-        'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`, 
+        Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
       },
     });
 
     user = new User({
       username: data.login,
       location: data.location,
-      avatar:data.avatar_url,
+      avatar: data.avatar_url,
       bio: data.bio,
       blog: data.blog,
       public_repos: data.public_repos,
@@ -27,22 +27,25 @@ export const saveUserData = async (username: string) => {
       isDeleted: false,
     });
 
-    const respoIds: ObjectId[] = await saveRepos(
+    const respoIds: ObjectId[] = await saveRepos(username, user._id); //saving repo's
+
+    const { followerIds, followingIds, friends } = await saveFollowDetails(
       username,
       user._id
-    ); //saving repo's
-     
-    const {followerIds,followingIds,friends} = await saveFollowDetails(username,user._id); //saved and extracted id
+    ); //saved and extracted id
 
     //all id's updated;
     user.repos = respoIds;
     user.follow_details.followers = followerIds;
     user.follow_details.following = followingIds;
     user.friends = friends; //friends added
-   
+
     await user.save(); //saved entire data;
 
-    return { message: 'User data fetched, saved, and updated successfully', user };
+    return {
+      message: "User data fetched, saved, and updated successfully",
+      user,
+    };
   } catch (error: any) {
     console.log(error.message);
     throw new Error("Failed to process :" + error.message);
@@ -80,18 +83,18 @@ const saveRepos = async (username: string, userId: unknown) => {
 const saveFollowDetails = async (username: string, userId: unknown) => {
   try {
     const [followers, following] = await Promise.all([
-      axios.get(`${process.env.GIT_API}/${username}/followers`,{
+      axios.get(`${process.env.GIT_API}/${username}/followers`, {
         headers: {
-          'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`, 
+          Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
         },
       }),
-      axios.get(`${process.env.GIT_API}/${username}/following`,{
+      axios.get(`${process.env.GIT_API}/${username}/following`, {
         headers: {
-          'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`, 
+          Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
         },
       }),
     ]);
-  
+
     let followDocument = await Follow.findOne({ userId });
 
     if (!followDocument) {
@@ -111,7 +114,11 @@ const saveFollowDetails = async (username: string, userId: unknown) => {
         );
 
         if (!existingFollower) {
-          followDocument.followers.push({ name: followerData.login,avatar:followerData.avatar_url,id:followerData.id});
+          followDocument.followers.push({
+            name: followerData.login,
+            avatar: followerData.avatar_url,
+            id: followerData.id,
+          });
         }
 
         return followerData.id;
@@ -126,7 +133,11 @@ const saveFollowDetails = async (username: string, userId: unknown) => {
         );
 
         if (!existingFollowing) {
-          followDocument.following.push({ name: followingData.login,avatar:followingData.avatar_url,id:followingData.id });
+          followDocument.following.push({
+            name: followingData.login,
+            avatar: followingData.avatar_url,
+            id: followingData.id,
+          });
         }
 
         return followingData.id;
@@ -134,23 +145,26 @@ const saveFollowDetails = async (username: string, userId: unknown) => {
     );
     await followDocument.save(); //saved all data;
     //find friends-------
-    const friends = await findFriends(followers.data,following.data);
+    const friends = await findFriends(followers.data, following.data);
 
-    return { followerIds, followingIds,friends };
-  } catch (error:any) {
+    return { followerIds, followingIds, friends };
+  } catch (error: any) {
     console.log(error.message);
     throw new Error("Failed to process :" + error.message);
   }
 };
 
-const findFriends = async(followers:{login:string,avatar_url:string}[],followings:{login:string,avatar_url:string}[]) => {
-  //lookup for following 
-  const followingSet = new Set(followings.map(user => user.login));
+const findFriends = async (
+  followers: { login: string; avatar_url: string }[],
+  followings: { login: string; avatar_url: string }[]
+) => {
+  //lookup for following
+  const followingSet = new Set(followings.map((user) => user.login));
   // Filter followers to find mutual
 
   const mutualFriends = followers
-    .filter(follower => followingSet.has(follower.login))
-    .map(f => ({ name: f.login, avatar: f.avatar_url }));
+    .filter((follower) => followingSet.has(follower.login))
+    .map((f) => ({ name: f.login, avatar: f.avatar_url }));
 
   return mutualFriends;
-}
+};

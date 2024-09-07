@@ -1,6 +1,6 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
-import cors from 'cors';
+import cors from "cors";
 import { errorHandler, notFound } from "./middlewares/errorMiddleware";
 import DatabaseConnection from "./services/dbConnection";
 dotenv.config();
@@ -15,23 +15,22 @@ DB_CONNECT.connect();
 
 //cors configuration -> preflight options
 const corsOption = {
-  origin:true,
-  methods:['GET','POST','PUT','PATCH','DELETE']
-}
+  origin: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+};
 
 app.use(cors(corsOption));
 
 //parsers
 app.use(express.json());
-app.use(express.urlencoded({extended:false}));
+app.use(express.urlencoded({ extended: false }));
 
+import gitUserRouter from "./routes/features/gitUser";
 
-import gitUserRouter from './routes/features/gitUser'
-
-app.use(`${process.env.BASE_URL}/user`,gitUserRouter);
+app.use(`${process.env.BASE_URL}/user`, gitUserRouter);
 
 //error and not found middlewares
-app.use(notFound)
+app.use(notFound);
 app.use(errorHandler);
 
 app.listen(port, () => {

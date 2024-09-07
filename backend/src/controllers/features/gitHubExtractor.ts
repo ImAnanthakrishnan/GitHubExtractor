@@ -18,10 +18,10 @@ export const extractGitUserDetails = asyncHandler(
     let gitUserDetails = await User.findOne({ username });
     // if user not existing we need call the api and save it to db
     if (!gitUserDetails) {
-      const { message, user } = await saveUserData(username); 
+      const { message, user } = await saveUserData(username);
 
       if (user) {
-        const gitUserDetails: {} = await getAllUserGitDetails({username});
+        const gitUserDetails: {} = await getAllUserGitDetails({ username });
 
         if (!gitUserDetails) {
           res.status(404).json({
@@ -34,7 +34,6 @@ export const extractGitUserDetails = asyncHandler(
           message: "User found",
           data: gitUserDetails,
         }); //data found
-
       } else {
         res.status(422).json({
           message: "Unprocessable",
@@ -43,7 +42,7 @@ export const extractGitUserDetails = asyncHandler(
       }
     } else {
       //if user already present, get all essential data.
-      const gitUserDetails: {} = await getAllUserGitDetails({username});
+      const gitUserDetails: {} = await getAllUserGitDetails({ username });
 
       if (gitUserDetails) {
         res.status(200).json({

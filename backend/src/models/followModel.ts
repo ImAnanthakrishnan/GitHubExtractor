@@ -2,7 +2,7 @@ import mongoose, { Mongoose, Schema } from "mongoose";
 import { IFollow } from "../types/modalTypes";
 
 const FollowSchema = new Schema<IFollow>({
-  userId: { type: mongoose.Types.ObjectId, ref: 'User', required: true },
+  userId: { type: mongoose.Types.ObjectId, ref: "User", required: true },
   followers: [
     {
       name: {
@@ -10,14 +10,14 @@ const FollowSchema = new Schema<IFollow>({
         unique: true,
         required: true,
       },
-      avatar:{
-        type:String,
-        required:true
+      avatar: {
+        type: String,
+        required: true,
       },
-      id:{
-        type:Number,
-        required:true
-      }
+      id: {
+        type: Number,
+        required: true,
+      },
     },
   ],
   following: [
@@ -27,17 +27,17 @@ const FollowSchema = new Schema<IFollow>({
         unique: true,
         required: true,
       },
-      avatar:{
-        type:String,
-        required:true
+      avatar: {
+        type: String,
+        required: true,
       },
-      id:{
-        type:Number,
-        required:true
-      }
+      id: {
+        type: Number,
+        required: true,
+      },
     },
   ],
 });
 
-const Follow = mongoose.model("Follow",FollowSchema);
+const Follow = mongoose.model("Follow", FollowSchema);
 export default Follow;
