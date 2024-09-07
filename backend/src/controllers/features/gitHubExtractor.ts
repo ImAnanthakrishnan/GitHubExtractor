@@ -20,10 +20,17 @@ export const extractGitUserDetails = asyncHandler(
     if (!gitUserDetails) {
       const { message, user } = await saveUserData(username);
       if (user) {
-        res.status(201).json({
-          message,
-          user,
-        }); //created
+        const gitUserDetails: {} = await getAllUserGitDetails(username);
+        if (gitUserDetails) {
+          res.status(200).json({
+            message: "User found",
+            data: gitUserDetails,
+          }); //data found
+        } else {
+          res.status(404).json({
+            message: "User details not found",
+          }); //not found
+        }
       } else {
         res.status(422).json({
           message: "Unprocessable",
@@ -31,7 +38,7 @@ export const extractGitUserDetails = asyncHandler(
       }
     } else {
       //if user already present, get all essential data.
-      const gitUserDetails:{} = await getAllUserGitDetails(username);
+      const gitUserDetails: {} = await getAllUserGitDetails(username);
 
       if (gitUserDetails) {
         res.status(200).json({
