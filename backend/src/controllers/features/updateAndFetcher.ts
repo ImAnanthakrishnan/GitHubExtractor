@@ -123,29 +123,38 @@ export const searchUser = asyncHandler(async (req: Request, res: Response) => {
 
 //////////////////////////////////////////////////////////////////////
 export const updateUser = asyncHandler(async (req: Request, res: Response) => {
-  const { username } = req.params;
-  const { bio, blog, location } = req.body;
-
-  if (!bio || !blog || !location || !username) {
-    res.status(400).json({
-      message: "Bad Request",
+    const { username } = req.params;
+    const { bio, blog, location } = req.body;
+  
+    if (!username) {
+       res.status(400).json({ message: "Bad Request" });
+       return;
+    }
+  
+    //  update object dynamically
+    const updateFields: any = {};
+    if (bio) updateFields.bio = bio;
+    if (blog) updateFields.blog = blog;
+    if (location) updateFields.location = location;
+  
+    if (Object.keys(updateFields).length === 0) {
+       res.status(400).json({ message: "No fields to update" });
+       return;
+    }
+  
+    const updatedUser = await User.findOneAndUpdate(
+      { username },
+      updateFields,
+      { new: true }
+    );
+  
+    if (!updatedUser) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+  
+    res.status(200).json({
+      message: "Success",
+      updatedUser,
     });
-    return; // data unavilable
-  }
-
-  const updatedUser = await User.findOneAndUpdate(
-    { username },
-    { location, blog, bio },
-    { new: true }
-  );
-
-  if (!updateUser) {
-    res.status(404).json({ message: "User not found" });
-    return;
-  }
-
-  res.status(200).json({
-    message: "Success",
-    updateUser,
-  });
 });
