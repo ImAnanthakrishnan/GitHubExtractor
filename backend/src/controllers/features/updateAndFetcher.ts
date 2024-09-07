@@ -99,3 +99,34 @@ export const searchUser = asyncHandler(async (req: Request, res: Response) => {
     });
   }
 });
+
+//////////////////////////////////////////////////////////////////////
+const updateUser = asyncHandler(
+    async(req:Request,res:Response) => {
+        const {username} = req.params;
+        const {bio,blog,location} = req.body;
+
+        if (!bio || !blog || !location || !username) {
+            res.status(400).json({
+              message: "Bad Request",
+            });
+            return; // data unavilable
+        }
+
+        const updatedUser = await User.findOneAndUpdate(
+            {username},
+            {location,blog,bio},
+            {new:true}
+        ); 
+
+        if(!updateUser){
+            res.status(404).json({ message: 'User not found' });
+            return;
+        }
+        
+        res.status(200).json({
+            message:'Success',
+            updateUser
+        });
+    }
+)
