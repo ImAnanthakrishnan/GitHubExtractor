@@ -33,7 +33,7 @@ const UserDetails = ({
       </div>
       <div className="userdetails-bottom">
         <h4>Name : {data.username}</h4>
-        <p>Bio :{data.bio ? data.bio : "Hey I am a self taught dev"}</p>
+        <p>Bio : {data.bio ? data.bio : "Hey I am a self taught dev"}</p>
         <p>Blog : {data.blog ? data.blog : "https://github.blog"}</p>
       </div>
     </section>

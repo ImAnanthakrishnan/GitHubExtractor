@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface Repo {
+export interface Repo {
     _id: string;
     name: string;
     description: string;
@@ -8,7 +8,7 @@ interface Repo {
     created_at: string;
   }
 
-  interface FollowDetail {
+  export interface FollowDetail {
     _id: string;
     name: string;
     avatar: string;
