@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import { Handler, Request, Response } from "express";
 import User from "../../models/userModel";
+import { getAllUserGitDetails } from "../../helpers/features/detailsGetter";
 
 export const getAllSortedUser = asyncHandler(
   async (req: Request, res: Response) => {
@@ -69,23 +70,22 @@ export const deleteUser = asyncHandler(
 export const searchUser = asyncHandler(async (req: Request, res: Response) => {
   const { username, location } = req.query;
 
-  if (!username || !location) {
+  if (!username && !location) {
     res.status(400).json({
       message: "Bad Request",
     });
     return; // if query params not present
   }
-
+  
   const query = {
     isDeleted: false,
     $or: [
-      { username: { $regex: username, $options: "i" } },
-      { location: { $regex: location, $options: "i" } },
+      { username: { $regex: String(username), $options: "i" } },
+      { location: { $regex: String(location), $options: "i" } },
     ],
   }; // query for search wit locatin or username and which is not deleted
 
-  const users = await User.find(query);
-
+ const users = await getAllUserGitDetails(query);//details getter;
   if (users) {
     //success
     res.status(200).json({
@@ -101,7 +101,7 @@ export const searchUser = asyncHandler(async (req: Request, res: Response) => {
 });
 
 //////////////////////////////////////////////////////////////////////
-const updateUser = asyncHandler(
+export const updateUser = asyncHandler(
     async(req:Request,res:Response) => {
         const {username} = req.params;
         const {bio,blog,location} = req.body;

@@ -21,7 +21,7 @@ export const extractGitUserDetails = asyncHandler(
       const { message, user } = await saveUserData(username); 
 
       if (user) {
-        const gitUserDetails: {} = await getAllUserGitDetails(username);
+        const gitUserDetails: {} = await getAllUserGitDetails({username});
 
         if (!gitUserDetails) {
           res.status(404).json({
@@ -43,7 +43,7 @@ export const extractGitUserDetails = asyncHandler(
       }
     } else {
       //if user already present, get all essential data.
-      const gitUserDetails: {} = await getAllUserGitDetails(username);
+      const gitUserDetails: {} = await getAllUserGitDetails({username});
 
       if (gitUserDetails) {
         res.status(200).json({

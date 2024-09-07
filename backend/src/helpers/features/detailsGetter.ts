@@ -1,10 +1,10 @@
 import User from "../../models/userModel"
 
-export const getAllUserGitDetails = async(username:string) => {
+export const getAllUserGitDetails = async(query:{}) => {
     try{
         //get all details 
         const data = await User.aggregate([
-            {$match:{username}}, //matched doc using username
+            {$match:query}, //matched doc using username
             { //repos lookup
                 $lookup:{
                     from:'repos',
