@@ -3,7 +3,11 @@ import { Handler, Request, Response } from "express";
 import User from "../../models/userModel";
 
 export const getAllSortedUser = asyncHandler(
-  async (req: Request, res: Response) => {}
+  async (req: Request, res: Response) => {
+
+    
+
+  }
 );
 
 ////////////////////////////////////////////////////////////////
@@ -18,7 +22,18 @@ export const deleteUser = asyncHandler(
         return; // if route param not present
       }
 
-      
+      const user = await User.findOneAndUpdate(
+        {username},
+        {isDeleted:true},
+        {new:true}
+      ) //changing status of delete for soft delete
+
+      if(!user){
+       res.status(404).json({ message: 'User not found' });
+       return;
+      }
+
+      res.json({ message: 'User soft deleted', user });
 
   }
 );
