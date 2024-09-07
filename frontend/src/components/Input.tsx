@@ -4,18 +4,15 @@ import useFetch from "../hooks/useFetch";
 const Input = ({
   setUsername,
   username,
-  
 }: {
   setUsername: React.Dispatch<React.SetStateAction<string>>;
   username: string;
-
 }) => {
   const [url, setUrl] = useState<string | null>(null);
   const handleClick = () => {
     if (username.trim()) {
       setUrl(`/user/${username}`);
     }
-   
   };
   useFetch(url);
   return (
@@ -31,4 +28,4 @@ const Input = ({
   );
 };
 
-export default Input;
+export default React.memo(Input);

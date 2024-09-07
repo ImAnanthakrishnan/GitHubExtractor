@@ -1,0 +1,259 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.heading{
+    color: blueviolet;
+    text-align: center;
+    margin-top: 10px;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+/*-------searchbar------*/
+.SearchInputContainer{
+    margin-top: 25px;
+    display: flex;
+    padding: 1em 1.5em;
+}
+
+.SearchInputContainer button{
+    width: 200px;
+    height: 50px;
+    color: black;
+    border-radius: 10px;
+    font-size: 1.23rem;
+    margin-left: 25px;
+}
+
+.SearchInputContainer button:hover{
+    background-color:bisque;
+    cursor: pointer;
+}
+
+.SearchInputContainer input{
+    width: 60%;
+    background-color: aliceblue;
+    border-radius: 10px;
+    padding: 0 20px;
+    font-size: 1.25rem;
+}
+
+.SearchInputContainer input::placeholder{
+    color: blueviolet;
+    font-size: 1rem;
+}
+
+/*---------userDetails---------*/
+.UserDetails{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f4f4f4;
+    margin: 0 auto;
+    width: 95%;
+    border-radius: 10px;
+    border: 1px solid gray;
+}
+
+.userdetails-top{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.userdetails-top img{
+    width: 10%;
+    border-radius: 70px;
+}
+
+.userdetails-top div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+
+.userdetails-bottom{
+    width: auto;
+    height: 100px;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.userdetails-bottom h4{
+    font-weight: 500;
+}
+.userdetails-bottom p{
+    color:rgb(113, 97, 97);
+}
+
+/*-----------repository-------*/
+
+.repository-container{
+    width: 95%;
+    margin: 1em auto;
+}
+
+.repos {
+    background-color: #f4f4f4;
+    padding: 10px;
+    display: flex;
+    justify-content: space-evenly;
+    max-width: 800px;
+    flex-wrap: wrap;
+    align-items: center;
+    height: fit-content;
+    margin: 0 auto;
+    position: relative;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.repos div{
+ width: 300px;
+ margin-bottom: 30px;
+ cursor: pointer;
+}
+
+.repos div:hover{
+    color: blueviolet;
+}
+
+.pagination{
+    display: flex;
+    justify-content: space-evenly;
+    width: 200px;
+    margin: 0.75em auto;
+}
+
+.pagination button{
+    width: 80px;
+    border-radius: 10px;
+}
+
+/*---------repo details----------*/
+.repo-details{
+    width: 95%;
+    margin: 1em auto;
+
+}
+
+.redirect{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 250px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.details{
+    display: flex;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.details-left img{
+    width: 20%;
+    border-radius: 70px;
+}
+
+
+.details-left, .details-right{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 200px;
+}
+
+.topic-container{
+ display: flex;
+ flex-wrap: wrap;
+ width: 250px;
+ justify-content: space-between;
+ align-items: center;
+}
+
+.small-topic{
+    width: 50px;
+    font-size: .75rem;
+    border-radius: 10px;
+    background-color: lightblue;
+    text-align: center;
+}
+
+.details-right button{
+    background-color: yellowgreen;
+    height: 40px;
+    border-radius: 8px;
+}
+
+
+/*-------modal styles-------*/
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background-color: #fff;
+    padding: 20px;
+    width: 400px;
+    border-radius: 8px;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  }
+  
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .follower-list {
+    margin-top: 20px;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  
+  .follower-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .follower-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+  }
+  
+  .follower-name {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  

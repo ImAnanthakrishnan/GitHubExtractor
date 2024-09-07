@@ -1,6 +1,5 @@
 import React from "react";
 import { useAppSelector } from "../app/hooks";
-import { Navigate } from "react-router-dom";
 
 const UserDetails = ({
   setShow,
@@ -10,10 +9,10 @@ const UserDetails = ({
   setStatus: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   const { data } = useAppSelector((data) => data.gitUser);
-  const handleClick = (str:string) => {
+  const handleClick = (str: string) => {
     setStatus(str);
     setShow(true);
-  }
+  };
   return (
     <section className="UserDetails">
       <div className="userdetails-top">
@@ -22,11 +21,11 @@ const UserDetails = ({
           <h4>{data.public_repos}</h4>
           <p>Repos</p>
         </div>
-        <div onClick={() => handleClick('followers')}>
+        <div onClick={() => handleClick("followers")}>
           <h4>{data.followers}</h4>
           <p>Followers</p>
         </div>
-        <div onClick={() => handleClick('following')}>
+        <div onClick={() => handleClick("following")}>
           <h4>{data.following}</h4>
           <p>Following</p>
         </div>
@@ -40,4 +39,4 @@ const UserDetails = ({
   );
 };
 
-export default UserDetails;
+export default React.memo(UserDetails);

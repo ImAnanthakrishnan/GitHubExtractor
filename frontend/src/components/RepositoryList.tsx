@@ -57,6 +57,7 @@ const RepositoryList = ({
                 : undefined
             }
           >
+            
             <h3>{repo.repoName}</h3>
             <p>{repo.description}</p>
           </div>
@@ -73,4 +74,4 @@ const RepositoryList = ({
   );
 };
 
-export default RepositoryList;
+export default React.memo(RepositoryList);
