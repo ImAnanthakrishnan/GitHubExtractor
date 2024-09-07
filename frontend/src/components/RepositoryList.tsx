@@ -8,7 +8,6 @@ const RepositoryList = ({setRepo,setTab}:{setRepo:React.Dispatch<React.SetStateA
   const {data} = useAppSelector(data => data.gitUser);
   const {currentRepos,totalPages} = pagination(data.repos,currentPage);
 
-
   const handlePrevious = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
