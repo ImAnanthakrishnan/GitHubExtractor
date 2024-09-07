@@ -1,4 +1,4 @@
-import User from "../../models/userModel.js"
+import User from "../../models/userModel"
 
 export const getAllUserGitDetails = async(username:string) => {
     try{
@@ -7,7 +7,7 @@ export const getAllUserGitDetails = async(username:string) => {
             {$match:{username}}, //matched doc using username
             { //repos lookup
                 $lookup:{
-                    from:'Repos',
+                    from:'repos',
                     localField:'repos',
                     foreignField:'_id',
                     as:'reposDetails'
@@ -15,17 +15,17 @@ export const getAllUserGitDetails = async(username:string) => {
             },
             {//followers lookup
                 $lookup:{
-                    from:'Follows',
+                    from:'follows',
                     localField:'follow_details.followers',
-                    foreignField:'_id',
+                    foreignField:'followers.id',
                     as:'followersDetails'
                 }
             },
             {//following lookup
                 $lookup:{
-                    from:'Follows',
+                    from:'follows',
                     localField:'follow_details.following',
-                    foreignField:'_id',
+                    foreignField:'following.id',
                     as:'followingDetails'                   
                 }
             },
@@ -42,8 +42,8 @@ export const getAllUserGitDetails = async(username:string) => {
                     following: 1,
                     created_at: 1,
                     follow_details:{
-                        followers:'$followersDetails',
-                        following:'$followingDetails'
+                        followers:'$followersDetails.followers',
+                        following:'$followingDetails.following'
                     },
                     friends:1,
                     repos:'$reposDetails',

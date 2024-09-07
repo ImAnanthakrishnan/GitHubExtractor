@@ -36,7 +36,7 @@ export const extractGitUserDetails = asyncHandler(
       if (gitUserDetails) {
         res.status(200).json({
           message: "User found",
-          user: gitUserDetails,
+          data: gitUserDetails,
         }); //data found
       } else {
         res.status(404).json({
