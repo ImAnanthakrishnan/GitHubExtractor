@@ -5,7 +5,33 @@ import User from "../../models/userModel";
 export const getAllSortedUser = asyncHandler(
   async (req: Request, res: Response) => {
 
-    
+    const {field} = req.query;
+
+    if (!field) {
+        res.status(400).json({
+          message: "Bad Request",
+        });
+        return; // if query param not present
+      }
+
+      const users = await User.aggregate([
+        {
+            $match:{isDeleted:false}
+        },
+        {
+            $sort:{field:-1}
+        }
+      ]);
+      
+      if(!users){
+        res.status(404).json({ message: 'User not found' });
+        return;      
+      }
+
+      res.status(200).json({
+        message:'Success',
+        users
+      })
 
   }
 );
