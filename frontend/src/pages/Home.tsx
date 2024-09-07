@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import Input from "../components/Input";
 import RepositoryList from "../components/RepositoryList";
 import UserDetails from "../components/UserDetails";
-import useFetch from "../hooks/useFetch";
 import { useAppSelector } from "../app/hooks";
 import RepositoryDetails from "../components/RepositoryDetails";
 import FollowerModal from "../components/modals/FollowModal";
@@ -18,7 +17,7 @@ const Home = () => {
   const [follow, setFollow] = useState<boolean>(false);
   const [show, setShow] = useState(false);
   const [status, setStatus] = useState<string>("");
-  const [followData,setFollowData] = useState<Repo[]>([]);
+  const [followData, setFollowData] = useState<Repo[]>([]);
   const [repo, setRepo] = useState<RepoType>({
     repoName: "",
     topics: [],
@@ -28,18 +27,26 @@ const Home = () => {
 
   return (
     <section className="container">
+      <h1 className="heading">GitHubExtractor</h1>
       <Input setUsername={setUsername} username={username} />
       {data.username && !follow ? (
         <>
           <UserDetails setShow={setShow} setStatus={setStatus} />
           {tab === "list" ? (
-            <RepositoryList setRepo={setRepo} setTab={setTab} />
+            <>
+              <h2 className="heading">Repositories</h2>
+              <RepositoryList setRepo={setRepo} setTab={setTab} />
+            </>
           ) : (
             <RepositoryDetails repo={repo} setTab={setTab} />
           )}
         </>
       ) : follow ? (
-        <RepositoryList follow={follow} followData={followData} setFollow={setFollow} />
+        <RepositoryList
+          follow={follow}
+          followData={followData}
+          setFollow={setFollow}
+        />
       ) : (
         <></>
       )}
@@ -51,8 +58,8 @@ const Home = () => {
         }
         setShow={setShow}
         show={show}
-        setFollow = {setFollow}
-        setFollowData = {setFollowData}
+        setFollow={setFollow}
+        setFollowData={setFollowData}
       />
     </section>
   );
